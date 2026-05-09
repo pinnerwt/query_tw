@@ -14,17 +14,17 @@ import (
 // instead of protobuf for the wire format — same role (compact, transferable),
 // no protoc toolchain required.
 type Filters struct {
-	Cities    []string  `json:"cities,omitempty"`
-	RemoteOK  bool      `json:"remote_ok,omitempty"`
-	PayMin    int       `json:"pay_min,omitempty"`
-	PayMax    int       `json:"pay_max,omitempty"`
-	PayPeriod string    `json:"pay_period,omitempty"` // hourly|daily|monthly|per_case
-	Period    string    `json:"period,omitempty"`     // 24h|7d|30d
-	JobTypes  []string  `json:"job_types,omitempty"`
-	Keyword   string    `json:"keyword,omitempty"`
-	Skills    []SkillRow `json:"skills,omitempty"`
+	Cities     []string   `json:"cities,omitempty"`
+	RemoteOK   bool       `json:"remote_ok,omitempty"`
+	PayMin     int        `json:"pay_min,omitempty"`
+	PayMax     int        `json:"pay_max,omitempty"`
+	PayPeriod  string     `json:"pay_period,omitempty"` // hourly|daily|monthly|per_case
+	Period     string     `json:"period,omitempty"`     // 24h|7d|30d
+	JobTypes   []string   `json:"job_types,omitempty"`
+	Keyword    string     `json:"keyword,omitempty"`
+	Skills     []SkillRow `json:"skills,omitempty"`
 	Experience []SkillRow `json:"experience,omitempty"`
-	HideSpam  bool      `json:"hide_spam"`
+	HideSpam   bool       `json:"hide_spam"`
 }
 
 type SkillRow struct {
