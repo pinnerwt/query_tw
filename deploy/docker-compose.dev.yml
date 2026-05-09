@@ -1,0 +1,56 @@
+name: cuizhao-dev
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      DATABASE_URL: postgres://cuizhao:cuizhao@cuizhao-postgres-1:5432/cuizhao_dev?sslmode=disable
+      REDIS_URL: redis://cuizhao-redis-1:6379/1
+      RUN_MIGRATIONS: "1"
+      STATIC_DIR: /app/dist
+      PORT: "8080"
+      ADMIN_BASIC_AUTH: ${ADMIN_BASIC_AUTH:-admin:changeme}
+    networks:
+      shared:
+        aliases: [cuizhao-api-dev]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  extractor:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.extractor
+    environment:
+      DATABASE_URL: postgres://cuizhao:cuizhao@cuizhao-postgres-1:5432/cuizhao_dev?sslmode=disable
+      REDIS_URL: redis://cuizhao-redis-1:6379/1
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+    networks:
+      shared: {}
+    restart: unless-stopped
+
+  scraper:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.scraper
+    environment:
+      REDIS_URL: redis://cuizhao-redis-1:6379/1
+      QUERIES: ${SCRAPE_QUERIES_DEV:-徵才}
+      MIN_POSTED_AT: ${MIN_POSTED_AT:-}
+      MAX_SCROLLS: ${MAX_SCROLLS_DEV:-3}
+      MAX_CONSEC_KNOWN: ${MAX_CONSEC_KNOWN_DEV:-3}
+      MAX_WALL_MINUTES: ${MAX_WALL_MINUTES_DEV:-5}
+      STORAGE_STATE: /app/state.json
+    volumes:
+      - ../state.json:/app/state.json:ro
+    networks:
+      shared: {}
+    profiles: ["manual"]
+
+networks:
+  shared:
+    name: deploy_default
+    external: true
