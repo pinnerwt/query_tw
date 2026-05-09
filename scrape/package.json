@@ -1,0 +1,13 @@
+{
+  "name": "cuizhao-scraper",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node scrape.mjs"
+  },
+  "dependencies": {
+    "ioredis": "^5.4.1",
+    "playwright": "^1.45.0"
+  }
+}

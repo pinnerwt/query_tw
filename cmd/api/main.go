@@ -15,6 +15,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
+	"github.com/pgi/matching/internal/admin"
 	"github.com/pgi/matching/internal/config"
 	"github.com/pgi/matching/internal/db"
 	"github.com/pgi/matching/internal/jobsrv"
@@ -77,6 +78,10 @@ func main() {
 	r.Get("/api/skills", sk.Skills)
 	r.Get("/api/roles", sk.Roles)
 	r.Get("/api/cities", sk.CitiesH)
+
+	adm := &admin.Server{Pool: pool, BasicAuth: cfg.AdminBasicAuth}
+	r.Route("/admin/api", adm.Routes)
+	admin.StartDailyReportLoop(ctx, pool)
 
 	// Static SPA — served from a directory configured at runtime so we don't
 	// need to bake the bundle into the Go binary. Default tries dist/ then

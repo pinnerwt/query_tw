@@ -32,17 +32,17 @@ export function Settings() {
 
       <section>
         <h2 className="mb-2 text-sm font-semibold uppercase text-slate-500">
-          匯出配置 (QR)
+          匯出 Profiles (QR)
         </h2>
         <p className="mb-2 text-xs text-slate-500">
-          將你的 {c.profiles.length} 個篩選配置與 {c.favorites.length} 個收藏轉成 QR Code。
+          將你的 {c.profiles.length} 個 profile 與 {c.favorites.length} 個收藏轉成 QR Code。
         </p>
         <QrExport />
       </section>
 
       <section>
         <h2 className="mb-2 text-sm font-semibold uppercase text-slate-500">
-          掃描匯入配置 (QR)
+          掃描匯入 Profiles (QR)
         </h2>
         <QrImport />
       </section>
@@ -52,7 +52,7 @@ export function Settings() {
         <button
           className="btn-ghost text-red-700"
           onClick={() => {
-            if (confirm('將清除所有本地資料（配置、收藏）。確定？')) {
+            if (confirm('將清除所有本地資料（profiles、收藏）。確定？')) {
               reset();
               alert('已重設');
             }

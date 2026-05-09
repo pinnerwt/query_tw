@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import dayjs from 'dayjs';
 import { useJob } from '../api/jobs';
+import { formatLocal } from '../lib/datetime';
 import { useConfigStore } from '../state/configStore';
 import { useSeenStore } from '../state/seenStore';
 import { formatPay } from '../lib/formatPay';
@@ -46,7 +46,7 @@ export function Detail() {
           {formatPay(j.pay)}
         </span>
         <span className="chip">{jobTypeLabel(j.job_type)}</span>
-        <span className="chip">{dayjs(j.posted_at).format('YYYY-MM-DD HH:mm')}</span>
+        <span className="chip">{formatLocal(j.posted_at)}</span>
         <button
           onClick={() => id && toggleFav(id)}
           className={`btn-ghost text-sm ${isFav ? 'text-yellow-600' : ''}`}

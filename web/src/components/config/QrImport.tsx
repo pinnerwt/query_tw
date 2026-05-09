@@ -40,7 +40,7 @@ export function QrImport() {
     try {
       const parsed = decodePayload(text);
       setPending(parsed);
-      setStatus(`偵測到配置：${parsed.profiles.length} 個 profile, ${parsed.favorites.length} 個收藏`);
+      setStatus(`偵測到 ${parsed.profiles.length} 個 profile, ${parsed.favorites.length} 個收藏`);
     } catch (e) {
       setStatus('解析失敗：' + (e as Error).message);
     }

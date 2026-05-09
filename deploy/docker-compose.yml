@@ -61,17 +61,36 @@ services:
       - "traefik.http.routers.cuizhao.tls.certresolver=letsencrypt"
       - "traefik.http.services.cuizhao.loadbalancer.server.port=8080"
 
-  seeder:
+  extractor:
     build:
       context: ..
       dockerfile: deploy/Dockerfile.extractor
-    command: ["--seed"]
     environment:
       DATABASE_URL: postgres://cuizhao:cuizhao@postgres:5432/cuizhao?sslmode=disable
-      FIXTURES_PATH: /app/fixtures/jobs.json
+      REDIS_URL: redis://redis:6379/0
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
     depends_on:
-      api:
+      postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  scraper:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.scraper
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      QUERIES: ${SCRAPE_QUERIES:-徵才,找人}
+      MIN_POSTED_AT: ${MIN_POSTED_AT:-}
+      MAX_SCROLLS: ${MAX_SCROLLS:-200}
+      MAX_CONSEC_KNOWN: ${MAX_CONSEC_KNOWN:-3}
+      MAX_WALL_MINUTES: ${MAX_WALL_MINUTES:-10}
+    depends_on:
+      redis:
+        condition: service_healthy
+    profiles: ["oneshot"]
     restart: "no"
 
 volumes:

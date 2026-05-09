@@ -2,6 +2,8 @@ import { Routes, Route, NavLink } from 'react-router-dom';
 import { Browse } from './pages/Browse';
 import { Detail } from './pages/Detail';
 import { Settings } from './pages/Settings';
+import { Favorites } from './pages/Favorites';
+import { Admin } from './pages/Admin';
 import { useEffect } from 'react';
 import { useConfigStore, ensureLoaded } from './state/configStore';
 
@@ -19,7 +21,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Browse />} />
             <Route path="/job/:id" element={<Detail />} />
+            <Route path="/favorites" element={<Favorites />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         ) : (
           <div className="p-8 text-center text-sm text-slate-500">載入中…</div>
@@ -40,6 +44,9 @@ function Header() {
         <nav className="flex items-center gap-2 text-sm">
           <NavLink to="/" className={({isActive}) => isActive ? 'btn-primary' : 'btn-ghost'} end>
             瀏覽
+          </NavLink>
+          <NavLink to="/favorites" className={({isActive}) => isActive ? 'btn-primary' : 'btn-ghost'}>
+            收藏
           </NavLink>
           <NavLink to="/settings" className={({isActive}) => isActive ? 'btn-primary' : 'btn-ghost'}>
             設定

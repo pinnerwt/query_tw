@@ -1,14 +1,9 @@
 import { Link } from 'react-router-dom';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/zh-tw';
 import { useConfigStore } from '../../state/configStore';
 import { useSeenStore } from '../../state/seenStore';
 import type { JobView } from '../../types';
 import { formatPay } from '../../lib/formatPay';
-
-dayjs.extend(relativeTime);
-dayjs.locale('zh-tw');
+import { fromNow } from '../../lib/datetime';
 
 export function JobCard({ job }: { job: JobView }) {
   const isFav = useConfigStore((s) => s.config.favorites.includes(job.id));
@@ -56,7 +51,7 @@ export function JobCard({ job }: { job: JobView }) {
             {s.years_min ? ` ≥${s.years_min}年` : ''}
           </span>
         ))}
-        <span className="ml-auto text-slate-400">{dayjs(job.posted_at).fromNow()}</span>
+        <span className="ml-auto text-slate-400">{fromNow(job.posted_at)}</span>
       </div>
     </article>
   );

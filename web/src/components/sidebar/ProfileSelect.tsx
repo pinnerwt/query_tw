@@ -12,7 +12,7 @@ export function ProfileSelect() {
 
   return (
     <section>
-      <h3 className="mb-1 text-xs font-semibold uppercase text-slate-500">配置</h3>
+      <h3 className="mb-1 text-xs font-semibold uppercase text-slate-500">Profiles</h3>
       <div className="flex gap-1">
         {editing ? (
           <input
@@ -44,7 +44,7 @@ export function ProfileSelect() {
         )}
       </div>
       <div className="mt-2 flex gap-1 text-xs">
-        <button className="btn-ghost flex-1" onClick={() => addProfile('新配置')}>
+        <button className="btn-ghost flex-1" onClick={() => addProfile('New profile')}>
           新增
         </button>
         <button className="btn-ghost flex-1" onClick={() => setEditing(true)}>
@@ -54,7 +54,7 @@ export function ProfileSelect() {
           className="btn-ghost flex-1 disabled:opacity-50"
           disabled={c.profiles.length <= 1}
           onClick={() => {
-            if (confirm(`刪除配置「${active.name}」？`)) deleteProfile(active.id);
+            if (confirm(`Delete profile "${active.name}"?`)) deleteProfile(active.id);
           }}
         >
           刪除
