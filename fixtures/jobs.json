@@ -1,0 +1,476 @@
+[
+  {
+    "url": "https://www.threads.com/@taipeitech/post/C5xQabc1",
+    "author_handle": "@taipeitech",
+    "author_name": "台北科技股份有限公司",
+    "posted_at": "2026-05-09T09:30:00+08:00",
+    "raw_text": "徵才｜資深前端工程師（台北信義區）月薪 70k-100k，需 3 年以上 React 經驗，熟 TypeScript、Tailwind。可遠端。",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "資深前端工程師",
+          "company": "台北科技",
+          "city": "台北市",
+          "district": "信義區",
+          "remote": true,
+          "job_type": "full_time",
+          "pay_min": 70000,
+          "pay_max": 100000,
+          "pay_period": "monthly",
+          "pay_raw": "70k-100k",
+          "skills": [
+            {"name": "React", "years_min": 3},
+            {"name": "TypeScript", "years_min": 2},
+            {"name": "Tailwind"}
+          ],
+          "experience": [{"role": "前端工程師", "years_min": 3}],
+          "tags": ["遠端可"],
+          "raw_excerpt": "徵才｜資深前端工程師（台北信義區）月薪 70k-100k"
+        }
+      ],
+      "spam_score": 0.05
+    }
+  },
+  {
+    "url": "https://www.threads.com/@designstudio/post/C5xQabc2",
+    "author_handle": "@designstudio",
+    "author_name": "好設計工作室",
+    "posted_at": "2026-05-09T08:00:00+08:00",
+    "raw_text": "找人｜UI/UX 設計師（新北板橋），月薪面議，需熟 Figma 和 Sketch，3 年以上經驗",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "UI/UX 設計師",
+          "company": "好設計工作室",
+          "city": "新北市",
+          "district": "板橋區",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_raw": "面議",
+          "skills": [
+            {"name": "Figma", "years_min": 3},
+            {"name": "Sketch", "years_min": 2}
+          ],
+          "experience": [{"role": "UI/UX 設計師", "years_min": 3}],
+          "tags": [],
+          "raw_excerpt": "找人｜UI/UX 設計師（新北板橋）"
+        }
+      ],
+      "spam_score": 0.02
+    }
+  },
+  {
+    "url": "https://www.threads.com/@gocompany/post/C5xQabc3",
+    "author_handle": "@gocompany",
+    "author_name": "Go 科技",
+    "posted_at": "2026-05-08T14:20:00+08:00",
+    "raw_text": "徵才｜後端工程師（台中），月薪 60k-90k，Go/Postgres/Docker，2年以上",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "後端工程師",
+          "company": "Go 科技",
+          "city": "台中市",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_min": 60000,
+          "pay_max": 90000,
+          "pay_period": "monthly",
+          "pay_raw": "60k-90k",
+          "skills": [
+            {"name": "Go", "years_min": 2},
+            {"name": "PostgreSQL", "years_min": 1},
+            {"name": "Docker", "years_min": 1}
+          ],
+          "experience": [{"role": "後端工程師", "years_min": 2}],
+          "tags": [],
+          "raw_excerpt": "徵才｜後端工程師（台中）"
+        }
+      ],
+      "spam_score": 0.03
+    }
+  },
+  {
+    "url": "https://www.threads.com/@cafe/post/C5xQabc4",
+    "author_handle": "@cafe",
+    "author_name": "巷口咖啡",
+    "posted_at": "2026-05-09T07:00:00+08:00",
+    "raw_text": "找人｜店員兼職（台北大安區），時薪 200-220，週末上班",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "店員",
+          "company": "巷口咖啡",
+          "city": "台北市",
+          "district": "大安區",
+          "remote": false,
+          "job_type": "part_time",
+          "pay_min": 200,
+          "pay_max": 220,
+          "pay_period": "hourly",
+          "pay_raw": "時薪 200-220",
+          "skills": [],
+          "experience": [{"role": "店員"}],
+          "tags": ["週末"],
+          "raw_excerpt": "找人｜店員兼職（台北大安區）"
+        }
+      ],
+      "spam_score": 0.05
+    }
+  },
+  {
+    "url": "https://www.threads.com/@startup/post/C5xQabc5",
+    "author_handle": "@startup",
+    "author_name": "新創公司",
+    "posted_at": "2026-05-08T11:00:00+08:00",
+    "raw_text": "徵才｜全端工程師 + 資深行銷企劃。前端: Vue/Nuxt，後端: Node/Postgres，遠端優先。行銷: 月薪 50k-70k。",
+    "stitched": true,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "全端工程師",
+          "company": "新創公司",
+          "city": "台北市",
+          "remote": true,
+          "job_type": "full_time",
+          "pay_min": 80000,
+          "pay_max": 130000,
+          "pay_period": "monthly",
+          "pay_raw": "80k-130k",
+          "skills": [
+            {"name": "Vue", "years_min": 2},
+            {"name": "Nuxt", "years_min": 1},
+            {"name": "Node.js", "years_min": 2},
+            {"name": "PostgreSQL"}
+          ],
+          "experience": [{"role": "全端工程師", "years_min": 3}],
+          "tags": ["遠端可"],
+          "raw_excerpt": "徵才｜全端工程師"
+        },
+        {
+          "title": "資深行銷企劃",
+          "company": "新創公司",
+          "city": "台北市",
+          "remote": true,
+          "job_type": "full_time",
+          "pay_min": 50000,
+          "pay_max": 70000,
+          "pay_period": "monthly",
+          "pay_raw": "50k-70k",
+          "skills": [
+            {"name": "SEO"},
+            {"name": "Google Analytics"}
+          ],
+          "experience": [{"role": "行銷企劃", "years_min": 3}],
+          "tags": ["遠端可"],
+          "raw_excerpt": "資深行銷企劃 50k-70k"
+        }
+      ],
+      "spam_score": 0.05
+    }
+  },
+  {
+    "url": "https://www.threads.com/@kaohsiungtech/post/C5xQabc6",
+    "author_handle": "@kaohsiungtech",
+    "author_name": "高雄資訊",
+    "posted_at": "2026-05-07T16:00:00+08:00",
+    "raw_text": "徵才｜資料工程師（高雄），月薪 70-90k，Python/SQL/Airflow，3年+",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "資料工程師",
+          "company": "高雄資訊",
+          "city": "高雄市",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_min": 70000,
+          "pay_max": 90000,
+          "pay_period": "monthly",
+          "pay_raw": "70-90k",
+          "skills": [
+            {"name": "Python", "years_min": 3},
+            {"name": "SQL", "years_min": 2}
+          ],
+          "experience": [{"role": "資料工程師", "years_min": 3}],
+          "tags": [],
+          "raw_excerpt": "徵才｜資料工程師（高雄）"
+        }
+      ],
+      "spam_score": 0.02
+    }
+  },
+  {
+    "url": "https://www.threads.com/@spam1/post/C5xQabc7",
+    "author_handle": "@spam1",
+    "author_name": "高薪兼職",
+    "posted_at": "2026-05-09T10:00:00+08:00",
+    "raw_text": "高薪兼職!! 日領3000 不限經驗 加LINE私訊 簡單動動手指就有錢",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "兼職機會",
+          "remote": true,
+          "job_type": "part_time",
+          "pay_min": 3000,
+          "pay_period": "daily",
+          "pay_raw": "日領3000",
+          "skills": [],
+          "experience": [],
+          "tags": [],
+          "raw_excerpt": "高薪兼職 日領3000"
+        }
+      ],
+      "spam_score": 0.92
+    }
+  },
+  {
+    "url": "https://www.threads.com/@taoyuanco/post/C5xQabc8",
+    "author_handle": "@taoyuanco",
+    "author_name": "桃園公司",
+    "posted_at": "2026-05-06T09:00:00+08:00",
+    "raw_text": "徵才｜DevOps 工程師（桃園），月薪 80-110k，AWS/Kubernetes/Terraform",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "DevOps 工程師",
+          "company": "桃園公司",
+          "city": "桃園市",
+          "remote": true,
+          "job_type": "full_time",
+          "pay_min": 80000,
+          "pay_max": 110000,
+          "pay_period": "monthly",
+          "pay_raw": "80-110k",
+          "skills": [
+            {"name": "AWS", "years_min": 3},
+            {"name": "Kubernetes", "years_min": 2},
+            {"name": "Terraform", "years_min": 1}
+          ],
+          "experience": [{"role": "DevOps 工程師", "years_min": 3}],
+          "tags": ["遠端可"],
+          "raw_excerpt": "徵才｜DevOps 工程師（桃園）"
+        }
+      ],
+      "spam_score": 0.02
+    }
+  },
+  {
+    "url": "https://www.threads.com/@socialteam/post/C5xQabc9",
+    "author_handle": "@socialteam",
+    "author_name": "社群行銷",
+    "posted_at": "2026-05-08T19:30:00+08:00",
+    "raw_text": "找人｜社群小編（台南），月薪 35-45k，需熟 Facebook Ads / Instagram",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "社群小編",
+          "company": "社群行銷",
+          "city": "台南市",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_min": 35000,
+          "pay_max": 45000,
+          "pay_period": "monthly",
+          "pay_raw": "35-45k",
+          "skills": [
+            {"name": "Facebook Ads", "years_min": 1}
+          ],
+          "experience": [{"role": "社群小編", "years_min": 1}],
+          "tags": [],
+          "raw_excerpt": "找人｜社群小編（台南）"
+        }
+      ],
+      "spam_score": 0.03
+    }
+  },
+  {
+    "url": "https://www.threads.com/@smallcompany/post/C5xQabc10",
+    "author_handle": "@smallcompany",
+    "author_name": "小公司",
+    "posted_at": "2026-05-07T08:30:00+08:00",
+    "raw_text": "徵才｜行政助理（新竹），月薪 32-38k，需熟 Excel/Word",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "行政助理",
+          "company": "小公司",
+          "city": "新竹市",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_min": 32000,
+          "pay_max": 38000,
+          "pay_period": "monthly",
+          "pay_raw": "32-38k",
+          "skills": [
+            {"name": "Excel"},
+            {"name": "Word"}
+          ],
+          "experience": [{"role": "行政助理", "years_min": 1}],
+          "tags": [],
+          "raw_excerpt": "徵才｜行政助理（新竹）"
+        }
+      ],
+      "spam_score": 0.04
+    }
+  },
+  {
+    "url": "https://www.threads.com/@aicompany/post/C5xQabc11",
+    "author_handle": "@aicompany",
+    "author_name": "AI 新創",
+    "posted_at": "2026-05-09T11:00:00+08:00",
+    "raw_text": "徵才｜AI 工程師（台北），月薪 100k-160k，需熟 Python/PyTorch/LLM，5年以上",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "AI 工程師",
+          "company": "AI 新創",
+          "city": "台北市",
+          "remote": true,
+          "job_type": "full_time",
+          "pay_min": 100000,
+          "pay_max": 160000,
+          "pay_period": "monthly",
+          "pay_raw": "100k-160k",
+          "skills": [
+            {"name": "Python", "years_min": 5},
+            {"name": "PyTorch", "years_min": 3},
+            {"name": "LLM", "years_min": 1}
+          ],
+          "experience": [{"role": "AI 工程師", "years_min": 5}],
+          "tags": ["遠端可"],
+          "raw_excerpt": "徵才｜AI 工程師（台北）"
+        }
+      ],
+      "spam_score": 0.02
+    }
+  },
+  {
+    "url": "https://www.threads.com/@gametw/post/C5xQabc12",
+    "author_handle": "@gametw",
+    "author_name": "遊戲開發",
+    "posted_at": "2026-05-05T13:00:00+08:00",
+    "raw_text": "徵才｜Unity 遊戲程式設計師（台北），月薪 70-100k，3年+",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "遊戲程式設計師",
+          "company": "遊戲開發",
+          "city": "台北市",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_min": 70000,
+          "pay_max": 100000,
+          "pay_period": "monthly",
+          "pay_raw": "70-100k",
+          "skills": [
+            {"name": "Unity", "years_min": 3},
+            {"name": "C#", "years_min": 3}
+          ],
+          "experience": [],
+          "tags": [],
+          "raw_excerpt": "徵才｜Unity 遊戲程式設計師"
+        }
+      ],
+      "spam_score": 0.04
+    }
+  },
+  {
+    "url": "https://www.threads.com/@chefjob/post/C5xQabc13",
+    "author_handle": "@chefjob",
+    "author_name": "餐廳",
+    "posted_at": "2026-05-09T06:00:00+08:00",
+    "raw_text": "找人｜廚師（台北中山區），月薪 45-55k，週休二日",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "廚師",
+          "company": "餐廳",
+          "city": "台北市",
+          "district": "中山區",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_min": 45000,
+          "pay_max": 55000,
+          "pay_period": "monthly",
+          "pay_raw": "45-55k",
+          "skills": [],
+          "experience": [{"role": "廚師", "years_min": 2}],
+          "tags": ["週休二日"],
+          "raw_excerpt": "找人｜廚師（台北中山區）"
+        }
+      ],
+      "spam_score": 0.03
+    }
+  },
+  {
+    "url": "https://www.threads.com/@pmoffice/post/C5xQabc14",
+    "author_handle": "@pmoffice",
+    "author_name": "產品團隊",
+    "posted_at": "2026-05-09T10:30:00+08:00",
+    "raw_text": "徵才｜產品經理 PM（台北），月薪 90-130k，5年+ B2B SaaS 經驗",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "產品經理",
+          "company": "產品團隊",
+          "city": "台北市",
+          "remote": true,
+          "job_type": "full_time",
+          "pay_min": 90000,
+          "pay_max": 130000,
+          "pay_period": "monthly",
+          "pay_raw": "90-130k",
+          "skills": [],
+          "experience": [{"role": "產品經理", "years_min": 5}],
+          "tags": ["遠端可", "B2B"],
+          "raw_excerpt": "徵才｜產品經理 PM"
+        }
+      ],
+      "spam_score": 0.02
+    }
+  },
+  {
+    "url": "https://www.threads.com/@hsinchutech/post/C5xQabc15",
+    "author_handle": "@hsinchutech",
+    "author_name": "新竹科技",
+    "posted_at": "2026-05-04T10:00:00+08:00",
+    "raw_text": "徵才｜韌體工程師（新竹），月薪 80-120k，C/Linux/嵌入式系統",
+    "stitched": false,
+    "extraction": {
+      "jobs": [
+        {
+          "title": "韌體工程師",
+          "company": "新竹科技",
+          "city": "新竹市",
+          "remote": false,
+          "job_type": "full_time",
+          "pay_min": 80000,
+          "pay_max": 120000,
+          "pay_period": "monthly",
+          "pay_raw": "80-120k",
+          "skills": [
+            {"name": "C", "years_min": 3},
+            {"name": "Linux", "years_min": 2}
+          ],
+          "experience": [],
+          "tags": ["嵌入式"],
+          "raw_excerpt": "徵才｜韌體工程師（新竹）"
+        }
+      ],
+      "spam_score": 0.03
+    }
+  }
+]

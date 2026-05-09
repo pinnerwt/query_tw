@@ -1,0 +1,26 @@
+# Build stage: Go binary
+FROM golang:1.22-alpine AS gobuilder
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/api ./cmd/api
+
+# Build stage: frontend
+FROM node:20-alpine AS webbuilder
+WORKDIR /web
+COPY web/package.json web/package-lock.json* ./
+RUN npm install --no-audit --no-fund
+COPY web/ ./
+RUN npm run build
+
+# Run stage
+FROM alpine:3.20
+RUN apk add --no-cache ca-certificates wget
+WORKDIR /app
+COPY --from=gobuilder /out/api ./api
+COPY --from=webbuilder /web/dist ./dist
+COPY migrations /app/migrations
+EXPOSE 8080
+ENV STATIC_DIR=/app/dist
+ENTRYPOINT ["./api"]
