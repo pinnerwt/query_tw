@@ -12,7 +12,10 @@ import (
 // RunDailyReport computes a one-day snapshot and upserts into daily_reports.
 // Counts are scoped to the previous local day (Asia/Taipei) by default.
 func RunDailyReport(ctx context.Context, pool *pgxpool.Pool) error {
-	loc, _ := time.LoadLocation("Asia/Taipei")
+	loc, err := time.LoadLocation("Asia/Taipei")
+	if err != nil || loc == nil {
+		loc = time.UTC
+	}
 	now := time.Now().In(loc)
 	dayStart := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, loc).Add(-24 * time.Hour)
 	dayEnd := dayStart.Add(24 * time.Hour)
@@ -45,7 +48,7 @@ func RunDailyReport(ctx context.Context, pool *pgxpool.Pool) error {
 		return err
 	}
 	payload, _ := json.Marshal(c)
-	_, err := pool.Exec(ctx, `
+	_, err = pool.Exec(ctx, `
 INSERT INTO daily_reports (date, payload) VALUES ($1, $2::jsonb)
 ON CONFLICT (date) DO UPDATE SET payload = EXCLUDED.payload`, dayStart.Format("2006-01-02"), payload)
 	return err

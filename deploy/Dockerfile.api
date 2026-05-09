@@ -11,7 +11,7 @@ RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/api ./cmd/api
 # web/dist/ into the image. Building Vite inside docker on a small EC2
 # box OOMs; doing it locally is faster and uses the dev's npm cache.
 FROM alpine:3.20
-RUN apk add --no-cache ca-certificates wget
+RUN apk add --no-cache ca-certificates wget tzdata
 WORKDIR /app
 COPY --from=gobuilder /out/api ./api
 COPY web/dist ./dist
