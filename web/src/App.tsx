@@ -4,6 +4,7 @@ import { Detail } from './pages/Detail';
 import { Settings } from './pages/Settings';
 import { Favorites } from './pages/Favorites';
 import { Admin } from './pages/Admin';
+import { Faq } from './pages/Faq';
 import { useEffect } from 'react';
 import { useConfigStore, ensureLoaded } from './state/configStore';
 
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/job/:id" element={<Detail />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/faq" element={<Faq />} />
             <Route path="/admin" element={<Admin />} />
           </Routes>
         ) : (
@@ -50,6 +52,9 @@ function Header() {
           </NavLink>
           <NavLink to="/settings" className={({isActive}) => isActive ? 'btn-primary' : 'btn-ghost'}>
             設定
+          </NavLink>
+          <NavLink to="/faq" className={({isActive}) => isActive ? 'btn-primary' : 'btn-ghost'}>
+            問與答
           </NavLink>
         </nav>
       </div>
