@@ -63,8 +63,27 @@ NGINX_CONTAINER="${NGINX_CONTAINER:-deploy-nginx-1}"
 COMPOSE="sudo docker compose -f ${COMPOSE_FILE} --env-file .env"
 
 if [[ "$RESEED" == "1" ]]; then
-  echo "--reseed not yet implemented" >&2
-  exit 2
+  if [[ "$ENV" != "dev" ]]; then echo "--reseed is dev-only" >&2; exit 2; fi
+  echo "==> snapshotting prod cuizhao -> cuizhao_dev"
+  ssh "${HOST}" "sudo bash -se" <<'EOF'
+set -euo pipefail
+PG=cuizhao-postgres-1
+TABLES="posts jobs skills roles job_skills job_experience job_languages job_tags"
+docker exec -i $PG psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1 \
+  -c "TRUNCATE TABLE $(echo $TABLES | sed 's/ /, /g') RESTART IDENTITY CASCADE;"
+docker exec -i $PG bash -c "
+  set -euo pipefail
+  pg_dump -U cuizhao -d cuizhao --data-only --no-owner \
+    --table=skills --table=roles \
+    | psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1
+  pg_dump -U cuizhao -d cuizhao --data-only --no-owner \
+    --table=posts --table=jobs --table=job_skills \
+    --table=job_experience --table=job_languages --table=job_tags \
+    | psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1
+"
+echo "reseed: done"
+EOF
+  exit 0
 fi
 
 echo "==> building web bundle locally"
