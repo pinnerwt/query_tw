@@ -1,5 +1,7 @@
 .env
 .env.local
+state.json
+scrape/state.json
 node_modules/
 dist/
 .DS_Store

@@ -77,6 +77,9 @@ services:
       MAX_SCROLLS: ${MAX_SCROLLS:-200}
       MAX_CONSEC_KNOWN: ${MAX_CONSEC_KNOWN:-3}
       MAX_WALL_MINUTES: ${MAX_WALL_MINUTES:-10}
+      STORAGE_STATE: /app/state.json
+    volumes:
+      - ../state.json:/app/state.json:ro
     depends_on:
       redis:
         condition: service_healthy

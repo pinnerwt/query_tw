@@ -62,6 +62,13 @@ export function Detail() {
           在 Threads 開啟
         </a>
       </div>
+      {j.requirements.skills.length === 0 && j.requirements.experience.length === 0 && (
+        <Section title="經驗要求">
+          <span className="chip bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-200">
+            無經驗可
+          </span>
+        </Section>
+      )}
       {j.requirements.skills.length > 0 && (
         <Section title="技能要求">
           <ul className="flex flex-wrap gap-1.5">

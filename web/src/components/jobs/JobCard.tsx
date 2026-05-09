@@ -11,6 +11,8 @@ export function JobCard({ job }: { job: JobView }) {
   const seen = useSeenStore((s) => s.seen.includes(job.id));
 
   const skills = job.requirements.skills.slice(0, 3);
+  const noReqs =
+    job.requirements.skills.length === 0 && job.requirements.experience.length === 0;
   return (
     <article
       data-testid="job-card"
@@ -51,6 +53,11 @@ export function JobCard({ job }: { job: JobView }) {
             {s.years_min ? ` ≥${s.years_min}年` : ''}
           </span>
         ))}
+        {noReqs && (
+          <span className="chip bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-200">
+            無經驗可
+          </span>
+        )}
         <span className="ml-auto text-slate-400">{fromNow(job.posted_at)}</span>
       </div>
     </article>
