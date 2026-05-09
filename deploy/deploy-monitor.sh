@@ -64,6 +64,9 @@ docker exec ${NGINX_CONTAINER} nginx -t
 docker exec ${NGINX_CONTAINER} nginx -s reload
 EOF
 
+echo "==> installing scraper cron"
+ssh "${HOST}" "sudo install -o root -g root -m 0644 ${DEST}/deploy/cuizhao-scrape.cron /etc/cron.d/cuizhao-scrape"
+
 echo "==> waiting for healthz via nginx"
 # Resolve query.tw directly to the host so we test the new origin, not
 # the (possibly stale) Cloudflare-edge IP.
