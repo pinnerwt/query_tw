@@ -7,14 +7,14 @@ import (
 )
 
 type Config struct {
-	DatabaseURL       string
-	RedisURL          string
-	DeepSeekAPIKey    string
-	ThreadsUser       string
-	ThreadsPass       string
-	AdminBasicAuth    string
-	LLMDailyCapCents  int
-	Port              string
+	DatabaseURL      string
+	RedisURL         string
+	DeepSeekAPIKey   string
+	ThreadsUser      string
+	ThreadsPass      string
+	AdminBasicAuth   string
+	LLMDailyCapCents int
+	Port             string
 }
 
 func Load() (*Config, error) {

@@ -123,14 +123,14 @@ func (s *Server) rolesApprove(w http.ResponseWriter, r *http.Request)  { s.appro
 func (s *Server) rolesReject(w http.ResponseWriter, r *http.Request)   { s.rejectAll(w, r, "roles") }
 
 type extractionItem struct {
-	PostID           string  `json:"post_id"`
-	URL              string  `json:"url"`
-	AuthorHandle     string  `json:"author_handle"`
-	FetchedAt        string  `json:"fetched_at"`
-	PostedAt         string  `json:"posted_at"`
-	JobCount         int     `json:"job_count"`
+	PostID           string   `json:"post_id"`
+	URL              string   `json:"url"`
+	AuthorHandle     string   `json:"author_handle"`
+	FetchedAt        string   `json:"fetched_at"`
+	PostedAt         string   `json:"posted_at"`
+	JobCount         int      `json:"job_count"`
 	SpamScore        *float64 `json:"spam_score,omitempty"`
-	ExtractionFailed bool    `json:"extraction_failed"`
+	ExtractionFailed bool     `json:"extraction_failed"`
 }
 
 func (s *Server) extractions(w http.ResponseWriter, r *http.Request) {
@@ -153,14 +153,14 @@ LIMIT $1`, limit)
 	out := []extractionItem{}
 	for rows.Next() {
 		var (
-			id        []byte
-			url       string
-			handle    string
-			fetched   any
-			posted    any
-			count     int
-			spam      *float64
-			failed    bool
+			id      []byte
+			url     string
+			handle  string
+			fetched any
+			posted  any
+			count   int
+			spam    *float64
+			failed  bool
 		)
 		if err := rows.Scan(&id, &url, &handle, &fetched, &posted, &count, &spam, &failed); err != nil {
 			http.Error(w, err.Error(), 500)

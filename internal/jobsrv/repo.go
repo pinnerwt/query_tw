@@ -113,11 +113,11 @@ func (r *Repo) List(ctx context.Context, sqlStr string, args []any, limit int) (
 				Experience: exps[hexID],
 				Languages:  langs[hexID],
 			},
-			Tags:      tags[hexID],
-			PostedAt:  rr.postedAt,
-			SourceURL: rr.url,
-			Author:    domain.Author{Handle: rr.authorHandle, Name: deref(rr.authorName)},
-			SpamScore: rr.spamScore,
+			Tags:       tags[hexID],
+			PostedAt:   rr.postedAt,
+			SourceURL:  rr.url,
+			Author:     domain.Author{Handle: rr.authorHandle, Name: deref(rr.authorName)},
+			SpamScore:  rr.spamScore,
 			RawExcerpt: deref(rr.rawExcerpt),
 		}
 		if rr.company != nil {
@@ -306,11 +306,11 @@ WHERE j.id = $1`, id)
 			Experience: exps[hexK],
 			Languages:  langs[hexK],
 		},
-		Tags:      tags[hexK],
-		PostedAt:  rr.postedAt,
-		SourceURL: rr.url,
-		Author:    domain.Author{Handle: rr.authorHandle, Name: deref(rr.authorName)},
-		SpamScore: rr.spamScore,
+		Tags:       tags[hexK],
+		PostedAt:   rr.postedAt,
+		SourceURL:  rr.url,
+		Author:     domain.Author{Handle: rr.authorHandle, Name: deref(rr.authorName)},
+		SpamScore:  rr.spamScore,
 		RawExcerpt: deref(rr.rawExcerpt),
 	}
 	if rr.company != nil {

@@ -8,15 +8,15 @@ import (
 
 func TestEncodeDecodeRoundTrip(t *testing.T) {
 	f := &Filters{
-		Cities:   []string{"台北市", "新北市"},
-		RemoteOK: true,
-		PayMin:   50000,
+		Cities:    []string{"台北市", "新北市"},
+		RemoteOK:  true,
+		PayMin:    50000,
 		PayPeriod: "monthly",
-		Period:   "7d",
-		JobTypes: []string{"full_time"},
-		Keyword:  "前端",
-		Skills:   []SkillRow{{Name: "React", YearsMin: 2}},
-		HideSpam: true,
+		Period:    "7d",
+		JobTypes:  []string{"full_time"},
+		Keyword:   "前端",
+		Skills:    []SkillRow{{Name: "React", YearsMin: 2}},
+		HideSpam:  true,
 	}
 	s, err := Encode(f)
 	if err != nil {
@@ -55,15 +55,15 @@ func TestBuildJobsQueryEmpty(t *testing.T) {
 func TestBuildJobsQueryFull(t *testing.T) {
 	now := time.Date(2026, 5, 9, 10, 0, 0, 0, time.UTC)
 	f := &Filters{
-		Cities:   []string{"台北市"},
-		RemoteOK: true,
-		PayMin:   50000,
+		Cities:    []string{"台北市"},
+		RemoteOK:  true,
+		PayMin:    50000,
 		PayPeriod: "monthly",
-		Period:   "7d",
-		JobTypes: []string{"full_time"},
-		Keyword:  "前端",
-		Skills:   []SkillRow{{Name: "React", YearsMin: 2}, {Name: "Figma", YearsMin: 4}},
-		HideSpam: true,
+		Period:    "7d",
+		JobTypes:  []string{"full_time"},
+		Keyword:   "前端",
+		Skills:    []SkillRow{{Name: "React", YearsMin: 2}, {Name: "Figma", YearsMin: 4}},
+		HideSpam:  true,
 	}
 	sql, args := BuildJobsQuery(f, nil, 10, now)
 	for _, want := range []string{

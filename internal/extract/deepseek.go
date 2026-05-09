@@ -12,21 +12,21 @@ import (
 )
 
 type ExtractedJob struct {
-	Title      string         `json:"title"`
-	Company    string         `json:"company,omitempty"`
-	City       string         `json:"city,omitempty"`
-	District   string         `json:"district,omitempty"`
-	Remote     bool           `json:"remote"`
-	JobType    string         `json:"job_type"`
-	PayMin     *int           `json:"pay_min,omitempty"`
-	PayMax     *int           `json:"pay_max,omitempty"`
-	PayPeriod  string         `json:"pay_period,omitempty"`
-	PayRaw     string         `json:"pay_raw,omitempty"`
-	Skills     []SkillEntry   `json:"skills,omitempty"`
-	Experience []RoleEntry    `json:"experience,omitempty"`
+	Title      string          `json:"title"`
+	Company    string          `json:"company,omitempty"`
+	City       string          `json:"city,omitempty"`
+	District   string          `json:"district,omitempty"`
+	Remote     bool            `json:"remote"`
+	JobType    string          `json:"job_type"`
+	PayMin     *int            `json:"pay_min,omitempty"`
+	PayMax     *int            `json:"pay_max,omitempty"`
+	PayPeriod  string          `json:"pay_period,omitempty"`
+	PayRaw     string          `json:"pay_raw,omitempty"`
+	Skills     []SkillEntry    `json:"skills,omitempty"`
+	Experience []RoleEntry     `json:"experience,omitempty"`
 	Languages  []LanguageEntry `json:"languages,omitempty"`
-	Tags       []string       `json:"tags,omitempty"`
-	RawExcerpt string         `json:"raw_excerpt,omitempty"`
+	Tags       []string        `json:"tags,omitempty"`
+	RawExcerpt string          `json:"raw_excerpt,omitempty"`
 }
 
 type SkillEntry struct {
@@ -45,10 +45,10 @@ type LanguageEntry struct {
 }
 
 type JobsExtraction struct {
-	Jobs       []ExtractedJob `json:"jobs"`
-	SpamScore  float32        `json:"spam_score"`
-	NewSkills  []string       `json:"_new_skills,omitempty"`
-	NewRoles   []string       `json:"_new_roles,omitempty"`
+	Jobs      []ExtractedJob `json:"jobs"`
+	SpamScore float32        `json:"spam_score"`
+	NewSkills []string       `json:"_new_skills,omitempty"`
+	NewRoles  []string       `json:"_new_roles,omitempty"`
 }
 
 type Client struct {
@@ -58,11 +58,11 @@ type Client struct {
 }
 
 type chatRequest struct {
-	Model        string         `json:"model"`
-	Messages     []chatMessage  `json:"messages"`
-	ResponseFormat any          `json:"response_format,omitempty"`
-	Temperature  float32        `json:"temperature"`
-	MaxTokens    int            `json:"max_tokens,omitempty"`
+	Model          string        `json:"model"`
+	Messages       []chatMessage `json:"messages"`
+	ResponseFormat any           `json:"response_format,omitempty"`
+	Temperature    float32       `json:"temperature"`
+	MaxTokens      int           `json:"max_tokens,omitempty"`
 }
 
 type chatMessage struct {
