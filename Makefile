@@ -1,4 +1,4 @@
-.PHONY: help build test web up down deps seed migrate api e2e all
+.PHONY: help build test web up down deps seed migrate api e2e all fmt-check
 
 help:
 	@echo "Targets:"
@@ -59,3 +59,6 @@ e2e:
 	cd web && npm run e2e
 
 all: deps web build
+
+fmt-check:
+	@out=$$(gofmt -l .); if [ -n "$$out" ]; then echo "gofmt issues:"; echo "$$out"; exit 1; fi
