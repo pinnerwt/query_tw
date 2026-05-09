@@ -5,13 +5,14 @@ services:
       context: ..
       dockerfile: deploy/Dockerfile.api
     environment:
-      DATABASE_URL: postgres://cuizhao:cuizhao@cuizhao-postgres-1:5432/cuizhao_dev?sslmode=disable
-      REDIS_URL: redis://cuizhao-redis-1:6379/1
+      DATABASE_URL: postgres://cuizhao:cuizhao@postgres:5432/cuizhao_dev?sslmode=disable
+      REDIS_URL: redis://redis:6379/1
       RUN_MIGRATIONS: "1"
       STATIC_DIR: /app/dist
       PORT: "8080"
       ADMIN_BASIC_AUTH: ${ADMIN_BASIC_AUTH:-admin:changeme}
     networks:
+      cuizhao: {}
       shared:
         aliases: [cuizhao-api-dev]
     healthcheck:
@@ -25,11 +26,11 @@ services:
       context: ..
       dockerfile: deploy/Dockerfile.extractor
     environment:
-      DATABASE_URL: postgres://cuizhao:cuizhao@cuizhao-postgres-1:5432/cuizhao_dev?sslmode=disable
-      REDIS_URL: redis://cuizhao-redis-1:6379/1
+      DATABASE_URL: postgres://cuizhao:cuizhao@postgres:5432/cuizhao_dev?sslmode=disable
+      REDIS_URL: redis://redis:6379/1
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
     networks:
-      shared: {}
+      cuizhao: {}
     restart: unless-stopped
 
   scraper:
@@ -37,7 +38,7 @@ services:
       context: ..
       dockerfile: deploy/Dockerfile.scraper
     environment:
-      REDIS_URL: redis://cuizhao-redis-1:6379/1
+      REDIS_URL: redis://redis:6379/1
       QUERIES: ${SCRAPE_QUERIES_DEV:-徵才}
       MIN_POSTED_AT: ${MIN_POSTED_AT:-}
       MAX_SCROLLS: ${MAX_SCROLLS_DEV:-3}
@@ -47,10 +48,13 @@ services:
     volumes:
       - ../state.json:/app/state.json:ro
     networks:
-      shared: {}
+      cuizhao: {}
     profiles: ["manual"]
 
 networks:
+  cuizhao:
+    name: cuizhao_default
+    external: true
   shared:
     name: deploy_default
     external: true
