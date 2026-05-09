@@ -65,22 +65,20 @@ COMPOSE="sudo docker compose -f ${COMPOSE_FILE} --env-file .env"
 if [[ "$RESEED" == "1" ]]; then
   if [[ "$ENV" != "dev" ]]; then echo "--reseed is dev-only" >&2; exit 2; fi
   echo "==> snapshotting prod cuizhao -> cuizhao_dev"
+  # NOTE: docker exec must NOT use -i here — the ssh stdin is feeding `bash -s`
+  # the heredoc, and `-i` would attach docker exec to that same stdin and
+  # consume the rest of the script. Each step that needs to pipe into psql
+  # does so internally inside `bash -c '...'`, not via the host shell.
   ssh "${HOST}" "sudo bash -se" <<'EOF'
 set -euo pipefail
 PG=cuizhao-postgres-1
-TABLES="posts jobs skills roles job_skills job_experience job_languages job_tags"
-docker exec -i $PG psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1 \
-  -c "TRUNCATE TABLE $(echo $TABLES | sed 's/ /, /g') RESTART IDENTITY CASCADE;"
-docker exec -i $PG bash -c "
-  set -euo pipefail
-  pg_dump -U cuizhao -d cuizhao --data-only --no-owner \
-    --table=skills --table=roles \
-    | psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1
-  pg_dump -U cuizhao -d cuizhao --data-only --no-owner \
-    --table=posts --table=jobs --table=job_skills \
-    --table=job_experience --table=job_languages --table=job_tags \
-    | psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1
-"
+echo "==> truncating dev tables"
+docker exec $PG psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1 \
+  -c "TRUNCATE TABLE posts, jobs, skills, roles, job_skills, job_experience, job_languages, job_tags RESTART IDENTITY CASCADE;"
+echo "==> reloading skills + roles"
+docker exec $PG bash -c 'pg_dump -U cuizhao -d cuizhao --data-only --no-owner --table=skills --table=roles | psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1'
+echo "==> reloading posts + jobs + dependents"
+docker exec $PG bash -c 'pg_dump -U cuizhao -d cuizhao --data-only --no-owner --table=posts --table=jobs --table=job_skills --table=job_experience --table=job_languages --table=job_tags | psql -U cuizhao -d cuizhao_dev -v ON_ERROR_STOP=1'
 echo "reseed: done"
 EOF
   exit 0
