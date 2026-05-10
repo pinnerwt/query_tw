@@ -84,3 +84,21 @@ func TestBuildJobsQueryFull(t *testing.T) {
 		t.Fatalf("expected many args, got %d", len(args))
 	}
 }
+
+func TestBuildJobsQueryCategories(t *testing.T) {
+	now := time.Date(2026, 5, 10, 0, 0, 0, 0, time.UTC)
+	f := &Filters{Categories: []string{"軟體/工程", "MIS/網管"}, HideSpam: true}
+	sql, args := BuildJobsQuery(f, nil, 30, now)
+	if !strings.Contains(sql, "FROM job_categories") {
+		t.Fatalf("expected job_categories EXISTS clause; got:\n%s", sql)
+	}
+	found := false
+	for _, a := range args {
+		if s, ok := a.([]string); ok && len(s) == 2 && s[0] == "軟體/工程" && s[1] == "MIS/網管" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("expected categories slice bound; args=%v", args)
+	}
+}
