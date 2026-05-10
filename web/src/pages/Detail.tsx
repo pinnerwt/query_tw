@@ -105,6 +105,17 @@ export function Detail() {
           </ul>
         </Section>
       )}
+      {j.categories.length > 0 && (
+        <Section title="職類">
+          <ul className="flex flex-wrap gap-1.5">
+            {j.categories.map((c) => (
+              <li key={c} className="chip">
+                {c}
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
       {j.tags.length > 0 && (
         <Section title="標籤">
           <ul className="flex flex-wrap gap-1.5">

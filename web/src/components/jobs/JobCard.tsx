@@ -11,6 +11,7 @@ export function JobCard({ job }: { job: JobView }) {
   const seen = useSeenStore((s) => s.seen.includes(job.id));
 
   const skills = job.requirements.skills.slice(0, 3);
+  const cats = job.categories.slice(0, 2);
   const noReqs =
     job.requirements.skills.length === 0 && job.requirements.experience.length === 0;
   return (
@@ -47,6 +48,14 @@ export function JobCard({ job }: { job: JobView }) {
         <span className="chip bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
           {formatPay(job.pay)}
         </span>
+        {cats.map((c) => (
+          <span
+            key={c}
+            className="chip bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-200"
+          >
+            {c}
+          </span>
+        ))}
         {skills.map((s) => (
           <span key={s.name} className="chip">
             {s.name}
