@@ -87,6 +87,18 @@ WHERE 1=1`)
 )`, nm, nm, add(int(r.YearsMin))))
 	}
 
+	// Categories: any-of match against canonical (case-insensitive) or aliases overlap.
+	if len(f.Categories) > 0 {
+		nm := add(f.Categories)
+		sb.WriteString(fmt.Sprintf(` AND EXISTS (
+  SELECT 1 FROM job_categories jc JOIN categories cat ON cat.id = jc.category_id
+  WHERE jc.job_id = j.id AND (
+    LOWER(cat.canonical) = ANY(SELECT LOWER(x) FROM unnest(%s::text[]) x)
+    OR cat.aliases && %s
+  )
+)`, nm, nm))
+	}
+
 	// Cursor (keyset pagination on posted_at DESC, id DESC)
 	if cur != nil {
 		sb.WriteString(" AND (j.posted_at, j.id) < (" + add(cur.PostedAt) + ", " + add(cur.ID) + ")")

@@ -15,6 +15,7 @@ import (
 // no protoc toolchain required.
 type Filters struct {
 	Cities     []string   `json:"cities,omitempty"`
+	Categories []string   `json:"categories,omitempty"`
 	RemoteOK   bool       `json:"remote_ok,omitempty"`
 	PayMin     int        `json:"pay_min,omitempty"`
 	PayMax     int        `json:"pay_max,omitempty"`

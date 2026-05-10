@@ -52,3 +52,10 @@ export function useCities() {
     staleTime: 60 * 60 * 1000,
   });
 }
+export function useCategories() {
+  return useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api<{ categories: DictItem[] }>(`/api/categories`),
+    staleTime: 5 * 60 * 1000,
+  });
+}

@@ -62,10 +62,10 @@ func main() {
 		logger.Error("dict", "err", err)
 		os.Exit(1)
 	}
-	system := extract.BuildPrompt(dict.Skills, dict.Roles)
+	system := extract.BuildPrompt(dict.Skills, dict.Roles, dict.Categories)
 	client := &extract.Client{APIKey: cfg.DeepSeekAPIKey}
 
-	logger.Info("extractor ready", "once", *once, "skills", len(dict.Skills), "roles", len(dict.Roles))
+	logger.Info("extractor ready", "once", *once, "skills", len(dict.Skills), "roles", len(dict.Roles), "categories", len(dict.Categories))
 
 	for {
 		var raw []string
@@ -145,8 +145,9 @@ ON CONFLICT (url) DO UPDATE SET extraction_failed = true, fetched_at = now()`,
 }
 
 type dict struct {
-	Skills []string
-	Roles  []string
+	Skills     []string
+	Roles      []string
+	Categories []string
 }
 
 func loadDict(ctx context.Context, pool *pgxpool.Pool) (*dict, error) {
@@ -173,6 +174,18 @@ func loadDict(ctx context.Context, pool *pgxpool.Pool) (*dict, error) {
 			return nil, err
 		}
 		d.Roles = append(d.Roles, s)
+	}
+	rows.Close()
+	rows, err = pool.Query(ctx, "SELECT canonical FROM categories WHERE approved=true ORDER BY canonical")
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var s string
+		if err := rows.Scan(&s); err != nil {
+			return nil, err
+		}
+		d.Categories = append(d.Categories, s)
 	}
 	rows.Close()
 	return d, nil

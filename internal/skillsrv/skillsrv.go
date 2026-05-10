@@ -19,11 +19,13 @@ type Item struct {
 type Server struct {
 	Pool *pgxpool.Pool
 
-	mu          sync.RWMutex
-	skillsAt    time.Time
-	rolesAt     time.Time
-	skillsCache []Item
-	rolesCache  []Item
+	mu              sync.RWMutex
+	skillsAt        time.Time
+	rolesAt         time.Time
+	categoriesAt    time.Time
+	skillsCache     []Item
+	rolesCache      []Item
+	categoriesCache []Item
 }
 
 const ttl = 5 * time.Minute
@@ -70,6 +72,27 @@ func (s *Server) Roles(w http.ResponseWriter, r *http.Request) {
 	s.rolesAt = time.Now()
 	s.mu.Unlock()
 	writeJSON(w, http.StatusOK, map[string]any{"roles": items})
+}
+
+func (s *Server) Categories(w http.ResponseWriter, r *http.Request) {
+	s.mu.RLock()
+	if time.Since(s.categoriesAt) < ttl && s.categoriesCache != nil {
+		out := s.categoriesCache
+		s.mu.RUnlock()
+		writeJSON(w, http.StatusOK, map[string]any{"categories": out})
+		return
+	}
+	s.mu.RUnlock()
+	items, err := s.fetch(r.Context(), "categories")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	s.mu.Lock()
+	s.categoriesCache = items
+	s.categoriesAt = time.Now()
+	s.mu.Unlock()
+	writeJSON(w, http.StatusOK, map[string]any{"categories": items})
 }
 
 func (s *Server) CitiesH(w http.ResponseWriter, r *http.Request) {

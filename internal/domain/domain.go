@@ -50,6 +50,7 @@ type JobView struct {
 	Pay          Pay          `json:"pay"`
 	Requirements Requirements `json:"requirements"`
 	Tags         []string     `json:"tags"`
+	Categories   []string     `json:"categories"`
 	PostedAt     time.Time    `json:"posted_at"`
 	SourceURL    string       `json:"source_url"`
 	Author       Author       `json:"author"`

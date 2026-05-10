@@ -26,6 +26,7 @@ type ExtractedJob struct {
 	Experience []RoleEntry     `json:"experience,omitempty"`
 	Languages  []LanguageEntry `json:"languages,omitempty"`
 	Tags       []string        `json:"tags,omitempty"`
+	Categories []string        `json:"categories,omitempty"`
 	RawExcerpt string          `json:"raw_excerpt,omitempty"`
 }
 
@@ -45,10 +46,11 @@ type LanguageEntry struct {
 }
 
 type JobsExtraction struct {
-	Jobs      []ExtractedJob `json:"jobs"`
-	SpamScore float32        `json:"spam_score"`
-	NewSkills []string       `json:"_new_skills,omitempty"`
-	NewRoles  []string       `json:"_new_roles,omitempty"`
+	Jobs          []ExtractedJob `json:"jobs"`
+	SpamScore     float32        `json:"spam_score"`
+	NewSkills     []string       `json:"_new_skills,omitempty"`
+	NewRoles      []string       `json:"_new_roles,omitempty"`
+	NewCategories []string       `json:"_new_categories,omitempty"`
 }
 
 type Client struct {
