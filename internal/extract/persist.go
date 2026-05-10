@@ -110,6 +110,16 @@ ON CONFLICT DO NOTHING`, jid, t); err != nil {
 					return err
 				}
 			}
+			for _, c := range j.Categories {
+				catID, err := upsertDict(ctx, tx, "categories", c)
+				if err != nil {
+					return err
+				}
+				if _, err := tx.Exec(ctx, `INSERT INTO job_categories (job_id, category_id) VALUES ($1,$2)
+ON CONFLICT DO NOTHING`, jid, catID); err != nil {
+					return fmt.Errorf("insert job_category: %w", err)
+				}
+			}
 		}
 		return nil
 	})
@@ -158,5 +168,6 @@ func buildSearchText(j ExtractedJob) string {
 	for _, t := range j.Tags {
 		parts = append(parts, t)
 	}
+	parts = append(parts, j.Categories...)
 	return strings.Join(parts, " ")
 }
