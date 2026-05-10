@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useConfigStore, useActiveProfile } from '../../state/configStore';
 import { ProfileSelect } from './ProfileSelect';
 import { CitiesPicker } from './CitiesPicker';
+import { CategoryPicker } from './CategoryPicker';
 import { PayRange } from './PayRange';
 import { RecencyTabs } from './RecencyTabs';
 import { JobTypeChecks } from './JobTypeChecks';
@@ -79,6 +80,10 @@ function FilterBody() {
         value={profile.filters.cities || []}
         remoteOk={!!profile.filters.remote_ok}
         onChange={(cities, remote_ok) => updateActive((f) => ({ ...f, cities, remote_ok }))}
+      />
+      <CategoryPicker
+        value={profile.filters.categories || []}
+        onChange={(categories) => updateActive((f) => ({ ...f, categories }))}
       />
       <PayRange
         min={profile.filters.pay_min || 0}

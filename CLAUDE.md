@@ -106,6 +106,14 @@ finds the `# CUIZHAO-NGINX-BLOCK-{START,END}` markers in the host's
 **Do not** `mv` the new config over the old one — the bind-mount caches by
 inode; the script uses `cat > FILE` for that reason.
 
+### Adding/curating job categories (`categories` table)
+
+Edit `migrations/000N_*_categories.up.sql` (or run a SQL UPDATE on
+`categories.aliases`), then `make migrate`. The extractor's prompt picks up the
+new dictionary on next process restart (`docker compose up -d extractor`). The
+admin dashboard surfaces unapproved categories the LLM emitted into
+`_new_categories` for human curation.
+
 ## Known gotchas
 
 - **Buffered output**: never wrap `deploy-monitor.sh` output in `| tail -N`

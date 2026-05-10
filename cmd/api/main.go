@@ -78,6 +78,7 @@ func main() {
 	r.Get("/api/skills", sk.Skills)
 	r.Get("/api/roles", sk.Roles)
 	r.Get("/api/cities", sk.CitiesH)
+	r.Get("/api/categories", sk.Categories)
 
 	adm := &admin.Server{Pool: pool, BasicAuth: cfg.AdminBasicAuth}
 	r.Route("/admin/api", adm.Routes)

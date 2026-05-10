@@ -2,6 +2,7 @@ export type SkillRow = { name: string; years_min: number };
 
 export type Filters = {
   cities?: string[];
+  categories?: string[];
   remote_ok?: boolean;
   pay_min?: number;
   pay_max?: number;
@@ -42,6 +43,7 @@ export type JobView = {
   pay: Pay;
   requirements: { skills: SkillReq[]; experience: RoleReq[]; languages: LangReq[] };
   tags: string[];
+  categories: string[];
   posted_at: string;
   source_url: string;
   author: Author;
