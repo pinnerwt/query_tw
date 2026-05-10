@@ -93,6 +93,10 @@ func (r *Repo) List(ctx context.Context, sqlStr string, args []any, limit int) (
 	if err != nil {
 		return nil, nil, err
 	}
+	cats, err := r.fetchCategories(ctx, ids)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	out := make([]domain.JobView, 0, len(raws))
 	for _, rr := range raws {
@@ -114,6 +118,7 @@ func (r *Repo) List(ctx context.Context, sqlStr string, args []any, limit int) (
 				Languages:  langs[hexID],
 			},
 			Tags:       tags[hexID],
+			Categories: cats[hexID],
 			PostedAt:   rr.postedAt,
 			SourceURL:  rr.url,
 			Author:     domain.Author{Handle: rr.authorHandle, Name: deref(rr.authorName)},
@@ -149,6 +154,9 @@ func (r *Repo) List(ctx context.Context, sqlStr string, args []any, limit int) (
 		}
 		if v.Tags == nil {
 			v.Tags = []string{}
+		}
+		if v.Categories == nil {
+			v.Categories = []string{}
 		}
 		out = append(out, v)
 	}
@@ -264,6 +272,29 @@ SELECT job_id, tag FROM job_tags WHERE job_id = ANY($1) ORDER BY tag`, ids)
 	return m, rows.Err()
 }
 
+func (r *Repo) fetchCategories(ctx context.Context, ids [][]byte) (map[string][]string, error) {
+	rows, err := r.Pool.Query(ctx, `
+SELECT jc.job_id, cat.canonical
+FROM job_categories jc JOIN categories cat ON cat.id = jc.category_id
+WHERE jc.job_id = ANY($1)
+ORDER BY cat.canonical`, ids)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	m := map[string][]string{}
+	for rows.Next() {
+		var jobID []byte
+		var name string
+		if err := rows.Scan(&jobID, &name); err != nil {
+			return nil, err
+		}
+		k := hex.EncodeToString(jobID)
+		m[k] = append(m[k], name)
+	}
+	return m, rows.Err()
+}
+
 // FetchOne returns a single hydrated JobView by hex id.
 func (r *Repo) FetchOne(ctx context.Context, hexID string) (*domain.JobView, error) {
 	id, err := hex.DecodeString(hexID)
@@ -289,6 +320,7 @@ WHERE j.id = $1`, id)
 	exps, _ := r.fetchExperience(ctx, [][]byte{rr.id})
 	langs, _ := r.fetchLanguages(ctx, [][]byte{rr.id})
 	tags, _ := r.fetchTags(ctx, [][]byte{rr.id})
+	cats, _ := r.fetchCategories(ctx, [][]byte{rr.id})
 	hexK := hex.EncodeToString(rr.id)
 	v := domain.JobView{
 		ID:    hexK,
@@ -307,6 +339,7 @@ WHERE j.id = $1`, id)
 			Languages:  langs[hexK],
 		},
 		Tags:       tags[hexK],
+		Categories: cats[hexK],
 		PostedAt:   rr.postedAt,
 		SourceURL:  rr.url,
 		Author:     domain.Author{Handle: rr.authorHandle, Name: deref(rr.authorName)},
@@ -341,6 +374,9 @@ WHERE j.id = $1`, id)
 	}
 	if v.Tags == nil {
 		v.Tags = []string{}
+	}
+	if v.Categories == nil {
+		v.Categories = []string{}
 	}
 	return &v, nil
 }
