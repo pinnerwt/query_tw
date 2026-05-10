@@ -24,6 +24,26 @@ to a deployed change. It does, in order:
 7. If invoked as `./deploy/deploy-monitor.sh scrape`, also build the scraper
    image and run one one-shot pass.
 
+## Branches and environments
+
+- `master` deploys to `query.tw` (prod) automatically on push.
+- `dev` deploys to `dev.query.tw` (dev) automatically on push. Same `api_server`,
+  isolated `cuizhao_dev` Postgres database and redis db `1`. Dev shares the
+  prod containers' `cuizhao_default` network for postgres/redis access.
+- Feature branches: CI only. Open PR to `dev` to preview, then `dev` → `master`
+  for prod.
+- The `deploy` workflow ssh-targets `91.98.207.105` directly because `query.tw`
+  is Cloudflare-proxied and SSH does not pass through the edge. Secrets:
+  `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS` (set via `gh secret set`).
+
+## Working on dev
+
+- Manual deploy: `./deploy/deploy-monitor.sh dev`
+- Reseed dev DB from prod snapshot: `./deploy/deploy-monitor.sh dev --reseed`
+  (manual only — normal deploys preserve dev data)
+- Dev scraper does not run on cron. To run one pass:
+  `ssh api_server 'cd /home/ubuntu/cuizhao-dev && sudo docker compose -f deploy/docker-compose.dev.yml --env-file .env --profile manual run --rm scraper'`
+
 ## Common change shapes — what to do
 
 ### Frontend-only change (`web/src/...`)
