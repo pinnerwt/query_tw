@@ -20,6 +20,7 @@ export function decodeFilters(s: string): Filters | null {
 function stripDefaults(f: Filters): Filters {
   const out: any = { hide_spam: f.hide_spam };
   if (f.cities?.length) out.cities = f.cities;
+  if (f.categories?.length) out.categories = f.categories;
   if (f.remote_ok) out.remote_ok = true;
   if (f.pay_min) out.pay_min = f.pay_min;
   if (f.pay_max) out.pay_max = f.pay_max;
