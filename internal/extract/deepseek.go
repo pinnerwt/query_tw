@@ -46,8 +46,8 @@ type LanguageEntry struct {
 }
 
 type JobsExtraction struct {
-	Jobs      []ExtractedJob `json:"jobs"`
-	SpamScore float32        `json:"spam_score"`
+	Jobs          []ExtractedJob `json:"jobs"`
+	SpamScore     float32        `json:"spam_score"`
 	NewSkills     []string       `json:"_new_skills,omitempty"`
 	NewRoles      []string       `json:"_new_roles,omitempty"`
 	NewCategories []string       `json:"_new_categories,omitempty"`
