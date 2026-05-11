@@ -10,6 +10,7 @@ export function SkillRows() {
   const rows = profile.filters.skills || [];
 
   const set = (rows: SkillRow[]) => update((f) => ({ ...f, skills: rows }));
+  const listId = 'sidebar-skills-options';
 
   return (
     <section data-testid="skill-rows">
@@ -17,17 +18,23 @@ export function SkillRows() {
         <h3 className="text-xs font-semibold uppercase text-slate-500">技能</h3>
         <button
           className="text-xs text-blue-600 hover:underline"
-          onClick={() => set([...rows, { name: options[0] || 'React', years_min: 0 }])}
+          onClick={() => set([...rows, { name: '', years_min: 0 }])}
         >
           + 新增
         </button>
       </div>
+      <datalist id={listId}>
+        {options.map((o) => (
+          <option key={o} value={o} />
+        ))}
+      </datalist>
       <div className="space-y-1">
         {rows.map((r, idx) => (
           <Row
             key={idx}
             row={r}
-            options={options}
+            listId={listId}
+            placeholder="例如 React"
             onChange={(next) => set(rows.map((r2, i) => (i === idx ? next : r2)))}
             onRemove={() => set(rows.filter((_, i) => i !== idx))}
           />
@@ -45,6 +52,7 @@ export function ExperienceRows() {
   const rows = profile.filters.experience || [];
 
   const set = (rows: SkillRow[]) => update((f) => ({ ...f, experience: rows }));
+  const listId = 'sidebar-roles-options';
 
   return (
     <section data-testid="experience-rows">
@@ -52,17 +60,23 @@ export function ExperienceRows() {
         <h3 className="text-xs font-semibold uppercase text-slate-500">經歷</h3>
         <button
           className="text-xs text-blue-600 hover:underline"
-          onClick={() => set([...rows, { name: options[0] || '前端工程師', years_min: 0 }])}
+          onClick={() => set([...rows, { name: '', years_min: 0 }])}
         >
           + 新增
         </button>
       </div>
+      <datalist id={listId}>
+        {options.map((o) => (
+          <option key={o} value={o} />
+        ))}
+      </datalist>
       <div className="space-y-1">
         {rows.map((r, idx) => (
           <Row
             key={idx}
             row={r}
-            options={options}
+            listId={listId}
+            placeholder="例如 前端工程師"
             onChange={(next) => set(rows.map((r2, i) => (i === idx ? next : r2)))}
             onRemove={() => set(rows.filter((_, i) => i !== idx))}
           />
@@ -74,29 +88,27 @@ export function ExperienceRows() {
 
 function Row({
   row,
-  options,
+  listId,
+  placeholder,
   onChange,
   onRemove,
 }: {
   row: SkillRow;
-  options: string[];
+  listId: string;
+  placeholder: string;
   onChange: (r: SkillRow) => void;
   onRemove: () => void;
 }) {
   return (
     <div className="flex items-center gap-1">
-      <select
+      <input
+        type="text"
+        list={listId}
         className="input flex-1"
         value={row.name}
+        placeholder={placeholder}
         onChange={(e) => onChange({ ...row, name: e.target.value })}
-      >
-        {!options.includes(row.name) && <option value={row.name}>{row.name}</option>}
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
+      />
       <span className="text-xs">≤</span>
       <input
         type="number"
