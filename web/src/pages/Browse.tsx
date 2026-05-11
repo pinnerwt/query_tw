@@ -6,6 +6,11 @@ import { Sidebar } from '../components/sidebar/Sidebar';
 import { JobCard } from '../components/jobs/JobCard';
 import { encodeFilters } from '../lib/filtersWire';
 import { useSearchParams } from 'react-router-dom';
+import { useAnnouncements } from '../api/announcements';
+import { useDismissedStore } from '../state/dismissedStore';
+import { AnnouncementCard } from '../components/AnnouncementCard';
+import { AdCard, AD_EVERY, AD_ENABLED } from '../components/AdCard';
+import type { JobView } from '../types';
 
 export function Browse() {
   const profile = useActiveProfile();
@@ -32,6 +37,19 @@ export function Browse() {
 
   const { data, fetchNextPage, hasNextPage, isFetching, error } = useJobsInfinite(filters);
   const jobs = data?.pages.flatMap((p) => p.jobs) || [];
+
+  const { data: annData } = useAnnouncements();
+  const dismissedIds = useDismissedStore((s) => s.ids);
+  const announcements = (annData?.items ?? []).filter((a) => !dismissedIds.includes(a.id));
+
+  type FeedItem = { type: 'job'; job: JobView } | { type: 'ad'; key: string };
+  const feed: FeedItem[] = AD_ENABLED
+    ? jobs.flatMap((j, i): FeedItem[] => {
+        const items: FeedItem[] = [{ type: 'job', job: j }];
+        if ((i + 1) % AD_EVERY === 0) items.push({ type: 'ad', key: `ad-${i}` });
+        return items;
+      })
+    : jobs.map((j): FeedItem => ({ type: 'job', job: j }));
 
   return (
     <div className="mx-auto flex max-w-6xl">
@@ -60,22 +78,30 @@ export function Browse() {
         )}
 
         <div className="h-[calc(100vh-7rem)]">
-          {jobs.length === 0 && !isFetching ? (
+          {jobs.length === 0 && announcements.length === 0 && !isFetching ? (
             <div className="p-8 text-center text-sm text-slate-500" data-testid="empty">
               沒有符合條件的職缺
             </div>
           ) : (
             <Virtuoso
-              data={jobs}
+              data={feed}
               data-testid="job-list"
               endReached={() => hasNextPage && fetchNextPage()}
               increaseViewportBy={{ top: 0, bottom: 600 }}
-              itemContent={(_, job) => (
+              itemContent={(_, item) => (
                 <div className="px-3 py-2">
-                  <JobCard job={job} />
+                  {item.type === 'job' ? <JobCard job={item.job} /> : <AdCard />}
                 </div>
               )}
               components={{
+                Header: () =>
+                  announcements.length > 0 ? (
+                    <div className="space-y-2 px-3 pt-3">
+                      {announcements.map((a) => (
+                        <AnnouncementCard key={a.id} a={a} />
+                      ))}
+                    </div>
+                  ) : null,
                 Footer: () =>
                   isFetching ? (
                     <div className="p-4 text-center text-xs text-slate-500">載入更多…</div>
