@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { formatLocal } from '../lib/datetime';
 import { AnnouncementCard } from '../components/AnnouncementCard';
 import type { Announcement, AnnouncementSeverity } from '../types';
@@ -125,17 +126,14 @@ function Login({ onLogin }: { onLogin: () => void }) {
 }
 
 function PendingDict({ resource }: { resource: 'skills' | 'roles' }) {
-  const [items, setItems] = useState<DictItem[] | null>(null);
+  const queryClient = useQueryClient();
   const [selected, setSelected] = useState<Set<number>>(new Set());
-  const [error, setError] = useState('');
-
-  const load = () => {
-    setItems(null);
-    adminFetch<{ items: DictItem[] }>(`/${resource}/pending`)
-      .then((r) => setItems(r.items))
-      .catch((e) => setError(e.message));
-  };
-  useEffect(load, [resource]);
+  const queryKey = ['admin', resource, 'pending'] as const;
+  const { data, error } = useQuery({
+    queryKey,
+    queryFn: () => adminFetch<{ items: DictItem[] }>(`/${resource}/pending`),
+  });
+  const items = data?.items;
 
   const ids = useMemo(() => Array.from(selected), [selected]);
   const act = async (action: 'approve' | 'reject') => {
@@ -143,10 +141,10 @@ function PendingDict({ resource }: { resource: 'skills' | 'roles' }) {
     if (action === 'reject' && !confirm(`確定刪除 ${ids.length} 個 ${resource}？`)) return;
     await adminFetch(`/${resource}/${action}`, { method: 'POST', body: JSON.stringify({ ids }) });
     setSelected(new Set());
-    load();
+    queryClient.invalidateQueries({ queryKey });
   };
 
-  if (error) return <p className="text-sm text-red-700">{error}</p>;
+  if (error) return <p className="text-sm text-red-700">{(error as Error).message}</p>;
   if (!items) return <p className="text-sm text-slate-500">載入中…</p>;
   if (items.length === 0) return <p className="text-sm text-slate-500">沒有待審的 {resource}。</p>;
 
@@ -281,19 +279,19 @@ function Reports() {
 }
 
 function AnnouncementsAdmin() {
-  const [items, setItems] = useState<Announcement[] | null>(null);
+  const queryClient = useQueryClient();
+  const queryKey = ['admin', 'announcements'] as const;
   const [severity, setSeverity] = useState<AnnouncementSeverity>('info');
   const [body, setBody] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const load = () => {
-    setItems(null);
-    adminFetch<{ items: Announcement[] }>('/announcements')
-      .then((r) => setItems(r.items))
-      .catch((e) => setError(e.message));
-  };
-  useEffect(load, []);
+  const { data, error: queryError } = useQuery({
+    queryKey,
+    queryFn: () => adminFetch<{ items: Announcement[] }>('/announcements'),
+  });
+  const items = data?.items ?? null;
+  const loadError = queryError ? (queryError as Error).message : '';
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -306,7 +304,7 @@ function AnnouncementsAdmin() {
         body: JSON.stringify({ severity, body }),
       });
       setBody('');
-      load();
+      queryClient.invalidateQueries({ queryKey });
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -318,7 +316,7 @@ function AnnouncementsAdmin() {
     if (!confirm('確定刪除這則公告？')) return;
     try {
       await adminFetch(`/announcements/${id}`, { method: 'DELETE' });
-      load();
+      queryClient.invalidateQueries({ queryKey });
     } catch (err) {
       setError((err as Error).message);
     }
@@ -360,7 +358,7 @@ function AnnouncementsAdmin() {
             />
           </>
         )}
-        {error && <p className="text-sm text-red-700">{error}</p>}
+        {(error || loadError) && <p className="text-sm text-red-700">{error || loadError}</p>}
         <button type="submit" className="btn-primary" disabled={submitting || !body.trim()}>
           {submitting ? '送出中…' : '發布'}
         </button>
