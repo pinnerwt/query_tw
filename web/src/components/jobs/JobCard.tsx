@@ -4,6 +4,7 @@ import { useSeenStore } from '../../state/seenStore';
 import type { JobView } from '../../types';
 import { formatPay } from '../../lib/formatPay';
 import { fromNow } from '../../lib/datetime';
+import { CardShell } from '../CardShell';
 
 export function JobCard({ job }: { job: JobView }) {
   const isFav = useConfigStore((s) => s.config.favorites.includes(job.id));
@@ -15,12 +16,7 @@ export function JobCard({ job }: { job: JobView }) {
   const noReqs =
     job.requirements.skills.length === 0 && job.requirements.experience.length === 0;
   return (
-    <article
-      data-testid="job-card"
-      className={`rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900 ${
-        seen ? 'opacity-70' : ''
-      }`}
-    >
+    <CardShell testId="job-card" faded={seen}>
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <Link to={`/job/${job.id}`} className="block">
@@ -69,6 +65,6 @@ export function JobCard({ job }: { job: JobView }) {
         )}
         <span className="ml-auto text-slate-400">{fromNow(job.posted_at)}</span>
       </div>
-    </article>
+    </CardShell>
   );
 }
