@@ -41,6 +41,7 @@ async function adminFetch<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error('UNAUTHORIZED');
   }
   if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
+  if (r.status === 204) return undefined as T;
   return r.json();
 }
 
