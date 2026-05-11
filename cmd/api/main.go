@@ -112,6 +112,7 @@ func main() {
 		r.Handle("/registerSW.js", fsServer)
 		r.Handle("/favicon.ico", fsServer)
 		r.Handle("/robots.txt", fsServer)
+		r.Handle("/ads.txt", fsServer)
 		// SPA fallback for unmatched routes
 		r.NotFound(func(w http.ResponseWriter, req *http.Request) {
 			// pass through workbox-*.js and icon-*.png if they exist on disk
