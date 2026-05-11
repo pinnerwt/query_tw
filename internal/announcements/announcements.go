@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -105,4 +107,66 @@ func (h *PublicHandler) List(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(map[string]any{"items": items})
+}
+
+type Store interface {
+	Lister
+	Create(ctx context.Context, severity, body string) (Announcement, error)
+	Delete(ctx context.Context, id int64) (bool, error)
+}
+
+type AdminHandler struct {
+	Store Store
+}
+
+func (h *AdminHandler) List(w http.ResponseWriter, r *http.Request) {
+	items, err := h.Store.List(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	if items == nil {
+		items = []Announcement{}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(map[string]any{"items": items})
+}
+
+type createBody struct {
+	Severity string `json:"severity"`
+	Body     string `json:"body"`
+}
+
+func (h *AdminHandler) Create(w http.ResponseWriter, r *http.Request) {
+	var b createBody
+	if err := json.NewDecoder(r.Body).Decode(&b); err != nil {
+		http.Error(w, "bad json", 400)
+		return
+	}
+	a, err := h.Store.Create(r.Context(), b.Severity, b.Body)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(a)
+}
+
+func (h *AdminHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		http.Error(w, "bad id", 400)
+		return
+	}
+	ok, err := h.Store.Delete(r.Context(), id)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }

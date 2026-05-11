@@ -84,7 +84,11 @@ func main() {
 	annRepo := &announcements.Repo{Pool: pool}
 	r.Get("/api/announcements", (&announcements.PublicHandler{Lister: annRepo}).List)
 
-	adm := &admin.Server{Pool: pool, BasicAuth: cfg.AdminBasicAuth}
+	adm := &admin.Server{
+		Pool:          pool,
+		BasicAuth:     cfg.AdminBasicAuth,
+		Announcements: &announcements.AdminHandler{Store: annRepo},
+	}
 	r.Route("/admin/api", adm.Routes)
 	admin.StartDailyReportLoop(ctx, pool)
 
