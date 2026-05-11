@@ -17,7 +17,8 @@ export function Browse() {
   const filters = profile.filters;
   const [params, setParams] = useSearchParams();
 
-  // Sync filters → URL ?f=
+  // Sync filters → URL ?f= (one-way: filters drive the URL — external URL
+  // changes must not re-run this and overwrite themselves).
   useEffect(() => {
     const enc = encodeFilters(filters);
     const cur = params.get('f') || '';
@@ -27,6 +28,7 @@ export function Browse() {
       else np.delete('f');
       setParams(np, { replace: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const [sidebarOpen, setSidebarOpen] = useState(() => {
