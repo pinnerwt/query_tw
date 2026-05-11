@@ -17,8 +17,6 @@ export function Sidebar({
   open: boolean;
   setOpen: (v: boolean) => void;
 }) {
-  const profile = useActiveProfile();
-  const updateActive = useConfigStore((s) => s.updateActiveFilters);
   const isMobile = useIsMobile();
 
   // Mobile: bottom sheet. Desktop: collapsible left rail.
