@@ -16,6 +16,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 
 	"github.com/pgi/matching/internal/admin"
+	"github.com/pgi/matching/internal/announcements"
 	"github.com/pgi/matching/internal/config"
 	"github.com/pgi/matching/internal/db"
 	"github.com/pgi/matching/internal/jobsrv"
@@ -79,6 +80,9 @@ func main() {
 	r.Get("/api/roles", sk.Roles)
 	r.Get("/api/cities", sk.CitiesH)
 	r.Get("/api/categories", sk.Categories)
+
+	annRepo := &announcements.Repo{Pool: pool}
+	r.Get("/api/announcements", (&announcements.PublicHandler{Lister: annRepo}).List)
 
 	adm := &admin.Server{Pool: pool, BasicAuth: cfg.AdminBasicAuth}
 	r.Route("/admin/api", adm.Routes)

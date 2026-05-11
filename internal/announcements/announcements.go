@@ -2,7 +2,9 @@ package announcements
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"net/http"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -82,4 +84,25 @@ func (r *Repo) Delete(ctx context.Context, id int64) (bool, error) {
 		return false, err
 	}
 	return tag.RowsAffected() > 0, nil
+}
+
+type Lister interface {
+	List(ctx context.Context) ([]Announcement, error)
+}
+
+type PublicHandler struct {
+	Lister Lister
+}
+
+func (h *PublicHandler) List(w http.ResponseWriter, r *http.Request) {
+	items, err := h.Lister.List(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if items == nil {
+		items = []Announcement{}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(map[string]any{"items": items})
 }
