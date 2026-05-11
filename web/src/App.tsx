@@ -7,6 +7,7 @@ import { Admin } from './pages/Admin';
 import { Faq } from './pages/Faq';
 import { useEffect } from 'react';
 import { useConfigStore, ensureLoaded } from './state/configStore';
+import { RefreshPrompt } from './components/RefreshPrompt';
 
 export default function App() {
   const ready = useConfigStore((s) => s.ready);
@@ -31,6 +32,7 @@ export default function App() {
           <div className="p-8 text-center text-sm text-slate-500">載入中…</div>
         )}
       </main>
+      <RefreshPrompt />
     </div>
   );
 }

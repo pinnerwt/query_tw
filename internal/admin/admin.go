@@ -10,11 +10,14 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/pgi/matching/internal/announcements"
 )
 
 type Server struct {
-	Pool      *pgxpool.Pool
-	BasicAuth string // "user:pass"
+	Pool          *pgxpool.Pool
+	BasicAuth     string // "user:pass"
+	Announcements *announcements.AdminHandler
 }
 
 func (s *Server) Routes(r chi.Router) {
@@ -31,6 +34,9 @@ func (s *Server) Routes(r chi.Router) {
 	r.Get("/whoami", func(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{"ok": true})
 	})
+	r.Get("/announcements", s.Announcements.List)
+	r.Post("/announcements", s.Announcements.Create)
+	r.Delete("/announcements/{id}", s.Announcements.Delete)
 }
 
 func (s *Server) basicAuth(next http.Handler) http.Handler {

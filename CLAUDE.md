@@ -80,6 +80,22 @@ ssh api_server 'cd /home/ubuntu/cuizhao && sudo docker compose -f deploy/docker-
 For scraper-only env vars (`SCRAPE_QUERIES`, `MAX_*`), no restart is needed —
 each `compose run --rm scraper` invocation (cron or manual) re-reads `.env`.
 
+Frontend-only env vars (Vite, prefix `VITE_*`) are inlined at build time, so a
+`web/` rebuild + `up -d api` is required after changing them. The ones that
+matter today:
+
+- `VITE_ADSENSE_CLIENT`, `VITE_ADSENSE_SLOT` — when both are set, the Browse
+  feed renders a Google AdSense `<ins>` slot every `VITE_AD_EVERY` (default 8)
+  job cards. With either var empty the AdCard component returns null, so the
+  feed is jobs-only until AdSense is wired.
+
+### Announcements
+
+Site-authored notices (fraud warnings, update notes) live in the `announcements`
+table and surface as cards pinned at the top of the Browse feed. CRUD lives in
+the 公告 tab of `/admin`. Public read endpoint: `GET /api/announcements`. Admin
+endpoints: `GET|POST /admin/api/announcements`, `DELETE /admin/api/announcements/{id}`.
+
 ### `state.json` (Threads auth cookies)
 
 Lives at the repo root, gitignored. Rsynced to the host by `deploy-monitor.sh`.

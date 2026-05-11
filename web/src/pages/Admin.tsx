@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { formatLocal } from '../lib/datetime';
+import { AnnouncementCard } from '../components/AnnouncementCard';
+import type { Announcement, AnnouncementSeverity } from '../types';
 
 type DictItem = { id: number; canonical: string; aliases: string[] };
 type Extraction = {
@@ -44,7 +46,7 @@ async function adminFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
 export function Admin() {
   const [authed, setAuthed] = useState(!!getAuth());
-  const [tab, setTab] = useState<'skills' | 'roles' | 'extractions' | 'reports'>('skills');
+  const [tab, setTab] = useState<'skills' | 'roles' | 'extractions' | 'reports' | 'announcements'>('skills');
 
   if (!authed) {
     return <Login onLogin={() => setAuthed(true)} />;
@@ -70,6 +72,7 @@ export function Admin() {
             ['roles', 'Roles 待審'],
             ['extractions', 'Extractions'],
             ['reports', '每日報告'],
+            ['announcements', '公告'],
           ] as const
         ).map(([k, l]) => (
           <button
@@ -85,6 +88,7 @@ export function Admin() {
       {tab === 'roles' && <PendingDict resource="roles" />}
       {tab === 'extractions' && <Extractions />}
       {tab === 'reports' && <Reports />}
+      {tab === 'announcements' && <AnnouncementsAdmin />}
     </div>
   );
 }
@@ -272,5 +276,113 @@ function Reports() {
         </li>
       ))}
     </ul>
+  );
+}
+
+function AnnouncementsAdmin() {
+  const [items, setItems] = useState<Announcement[] | null>(null);
+  const [severity, setSeverity] = useState<AnnouncementSeverity>('info');
+  const [body, setBody] = useState('');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const load = () => {
+    setItems(null);
+    adminFetch<{ items: Announcement[] }>('/announcements')
+      .then((r) => setItems(r.items))
+      .catch((e) => setError(e.message));
+  };
+  useEffect(load, []);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!body.trim()) return;
+    setSubmitting(true);
+    setError('');
+    try {
+      await adminFetch('/announcements', {
+        method: 'POST',
+        body: JSON.stringify({ severity, body }),
+      });
+      setBody('');
+      load();
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const remove = async (id: number) => {
+    if (!confirm('確定刪除這則公告？')) return;
+    try {
+      await adminFetch(`/announcements/${id}`, { method: 'DELETE' });
+      load();
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <form onSubmit={submit} className="space-y-2">
+        <div className="flex items-center gap-2">
+          <label className="text-sm">severity</label>
+          <select
+            value={severity}
+            onChange={(e) => setSeverity(e.target.value as AnnouncementSeverity)}
+            className="rounded border px-2 py-1 text-sm dark:bg-slate-800"
+          >
+            <option value="info">info</option>
+            <option value="warning">warning</option>
+            <option value="critical">critical</option>
+          </select>
+        </div>
+        <textarea
+          className="block w-full rounded border p-2 text-sm dark:bg-slate-800"
+          rows={4}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          placeholder="支援 markdown — **粗體**、[連結](https://…)"
+        />
+        {body.trim() && (
+          <>
+            <div className="text-xs text-slate-500">預覽：</div>
+            <AnnouncementCard
+              a={{
+                id: -1,
+                severity,
+                body,
+                created_at: new Date().toISOString(),
+              }}
+              dismissible={false}
+            />
+          </>
+        )}
+        {error && <p className="text-sm text-red-700">{error}</p>}
+        <button type="submit" className="btn-primary" disabled={submitting || !body.trim()}>
+          {submitting ? '送出中…' : '發布'}
+        </button>
+      </form>
+
+      <div className="space-y-2">
+        <h2 className="text-sm font-semibold">已發布</h2>
+        {items === null && <p className="text-sm text-slate-500">載入中…</p>}
+        {items?.length === 0 && <p className="text-sm text-slate-500">尚無公告。</p>}
+        {items?.map((a) => (
+          <div key={a.id} className="flex items-start gap-2">
+            <div className="flex-1">
+              <AnnouncementCard a={a} dismissible={false} />
+            </div>
+            <button
+              className="btn-ghost text-red-700"
+              onClick={() => remove(a.id)}
+            >
+              刪除
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

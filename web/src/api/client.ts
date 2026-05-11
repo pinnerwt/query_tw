@@ -5,5 +5,8 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   if (!res.ok) {
     throw new Error(`${path} → ${res.status}`);
   }
+  if (res.status === 204) {
+    return undefined as T;
+  }
   return (await res.json()) as T;
 }
