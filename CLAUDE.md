@@ -36,6 +36,43 @@ to a deployed change. It does, in order:
   is Cloudflare-proxied and SSH does not pass through the edge. Secrets:
   `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS` (set via `gh secret set`).
 
+## Local testing (no backend container)
+
+You can run the SPA against the deployed dev API instead of spinning up the
+local Go server + postgres + redis:
+
+```sh
+# web/.env.local  (gitignored)
+API_TARGET=https://dev.query.tw
+
+cd web && npm run dev   # http://localhost:5173
+```
+
+`vite.config.ts` reads `API_TARGET` via `loadEnv` and proxies `/api` + `/healthz`
+there. Default is still `http://localhost:8080` so a fully-local stack (`make
+up-deps` + `go run ./cmd/api`) keeps working unchanged.
+
+### Testing AdSense slots locally
+
+AdSense rendering is gated on `VITE_ADSENSE_CLIENT` + `VITE_ADSENSE_SLOT` (both
+inlined at build time). To see the slots populate without an approved AdSense
+account, set `VITE_ADSENSE_TEST=1` — `AdCard.tsx` then passes `data-adtest="on"`
+to the `<ins>` tag and Google serves a placeholder test ad on localhost.
+
+```sh
+# web/.env.local
+VITE_ADSENSE_CLIENT=ca-pub-0000000000000000
+VITE_ADSENSE_SLOT=1234567890
+VITE_ADSENSE_TEST=1
+VITE_AD_EVERY=4
+API_TARGET=https://dev.query.tw
+```
+
+`VITE_ADSENSE_TEST` is only read by the dev/test path — it has no effect when
+unset, so leave it out of prod `.env`. Remember `VITE_*` is inlined at build
+time: a `npm run build` (or `deploy-monitor.sh`) is required after changing any
+of these for the deployed site.
+
 ## Working on dev
 
 - Manual deploy: `./deploy/deploy-monitor.sh dev`
