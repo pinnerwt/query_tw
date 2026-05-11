@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { useJobsInfinite } from '../api/jobs';
-import { useActiveProfile, useConfigStore } from '../state/configStore';
+import { useActiveProfile } from '../state/configStore';
 import { Sidebar } from '../components/sidebar/Sidebar';
 import { JobCard } from '../components/jobs/JobCard';
 import { encodeFilters } from '../lib/filtersWire';
@@ -15,7 +15,6 @@ import type { JobView } from '../types';
 export function Browse() {
   const profile = useActiveProfile();
   const filters = profile.filters;
-  const updateActive = useConfigStore((s) => s.updateActiveFilters);
   const [params, setParams] = useSearchParams();
 
   // Sync filters → URL ?f=
