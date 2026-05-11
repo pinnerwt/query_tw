@@ -9,6 +9,7 @@ declare global {
 
 const CLIENT = (import.meta as any).env?.VITE_ADSENSE_CLIENT as string | undefined;
 const SLOT = (import.meta as any).env?.VITE_ADSENSE_SLOT as string | undefined;
+const TEST = (import.meta as any).env?.VITE_ADSENSE_TEST === '1';
 
 export function AdCard() {
   const pushed = useRef(false);
@@ -33,6 +34,7 @@ export function AdCard() {
         data-ad-slot={SLOT}
         data-ad-format="auto"
         data-full-width-responsive="true"
+        {...(TEST ? { 'data-adtest': 'on' } : {})}
       />
     </CardShell>
   );
