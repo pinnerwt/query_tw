@@ -61,6 +61,53 @@ export function Settings() {
           清除全部本地資料
         </button>
       </section>
+
+      <section>
+        <h2 className="mb-2 text-sm font-semibold uppercase text-slate-500">應用程式</h2>
+        <UpdateButton />
+      </section>
+    </div>
+  );
+}
+
+function UpdateButton() {
+  const [msg, setMsg] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function checkForUpdate() {
+    setBusy(true);
+    setMsg('檢查中…');
+    try {
+      const reg = (window as unknown as { __swReg?: ServiceWorkerRegistration }).__swReg;
+      if (!reg) {
+        setMsg('Service worker 尚未註冊');
+        return;
+      }
+      await reg.update();
+      if (reg.waiting) {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        window.location.reload();
+        return;
+      }
+      setMsg('已是最新版本');
+    } catch (err) {
+      setMsg(`更新失敗：${(err as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="space-y-2">
+      <button
+        className="btn-primary"
+        onClick={checkForUpdate}
+        disabled={busy}
+        data-testid="check-update"
+      >
+        檢查更新
+      </button>
+      {msg && <p className="text-xs text-slate-500">{msg}</p>}
     </div>
   );
 }

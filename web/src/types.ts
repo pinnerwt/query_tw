@@ -59,3 +59,12 @@ export type JobsPage = {
 export type DictItem = { id: number; canonical: string; aliases: string[] };
 
 export const defaultFilters = (): Filters => ({ hide_spam: true });
+
+export type AnnouncementSeverity = 'info' | 'warning' | 'critical';
+
+export type Announcement = {
+  id: number;
+  severity: AnnouncementSeverity;
+  body: string;
+  created_at: string;
+};

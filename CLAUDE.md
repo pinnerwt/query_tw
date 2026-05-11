@@ -36,6 +36,43 @@ to a deployed change. It does, in order:
   is Cloudflare-proxied and SSH does not pass through the edge. Secrets:
   `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS` (set via `gh secret set`).
 
+## Local testing (no backend container)
+
+You can run the SPA against the deployed dev API instead of spinning up the
+local Go server + postgres + redis:
+
+```sh
+# web/.env.local  (gitignored)
+API_TARGET=https://dev.query.tw
+
+cd web && npm run dev   # http://localhost:5173
+```
+
+`vite.config.ts` reads `API_TARGET` via `loadEnv` and proxies `/api` + `/healthz`
+there. Default is still `http://localhost:8080` so a fully-local stack (`make
+up-deps` + `go run ./cmd/api`) keeps working unchanged.
+
+### Testing AdSense slots locally
+
+AdSense rendering is gated on `VITE_ADSENSE_CLIENT` + `VITE_ADSENSE_SLOT` (both
+inlined at build time). To see the slots populate without an approved AdSense
+account, set `VITE_ADSENSE_TEST=1` — `AdCard.tsx` then passes `data-adtest="on"`
+to the `<ins>` tag and Google serves a placeholder test ad on localhost.
+
+```sh
+# web/.env.local
+VITE_ADSENSE_CLIENT=ca-pub-0000000000000000
+VITE_ADSENSE_SLOT=1234567890
+VITE_ADSENSE_TEST=1
+VITE_AD_EVERY=4
+API_TARGET=https://dev.query.tw
+```
+
+`VITE_ADSENSE_TEST` is only read by the dev/test path — it has no effect when
+unset, so leave it out of prod `.env`. Remember `VITE_*` is inlined at build
+time: a `npm run build` (or `deploy-monitor.sh`) is required after changing any
+of these for the deployed site.
+
 ## Working on dev
 
 - Manual deploy: `./deploy/deploy-monitor.sh dev`
@@ -79,6 +116,22 @@ ssh api_server 'cd /home/ubuntu/cuizhao && sudo docker compose -f deploy/docker-
 
 For scraper-only env vars (`SCRAPE_QUERIES`, `MAX_*`), no restart is needed —
 each `compose run --rm scraper` invocation (cron or manual) re-reads `.env`.
+
+Frontend-only env vars (Vite, prefix `VITE_*`) are inlined at build time, so a
+`web/` rebuild + `up -d api` is required after changing them. The ones that
+matter today:
+
+- `VITE_ADSENSE_CLIENT`, `VITE_ADSENSE_SLOT` — when both are set, the Browse
+  feed renders a Google AdSense `<ins>` slot every `VITE_AD_EVERY` (default 8)
+  job cards. With either var empty the AdCard component returns null, so the
+  feed is jobs-only until AdSense is wired.
+
+### Announcements
+
+Site-authored notices (fraud warnings, update notes) live in the `announcements`
+table and surface as cards pinned at the top of the Browse feed. CRUD lives in
+the 公告 tab of `/admin`. Public read endpoint: `GET /api/announcements`. Admin
+endpoints: `GET|POST /admin/api/announcements`, `DELETE /admin/api/announcements/{id}`.
 
 ### `state.json` (Threads auth cookies)
 
