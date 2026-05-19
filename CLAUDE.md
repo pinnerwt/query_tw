@@ -122,7 +122,7 @@ Frontend-only env vars (Vite, prefix `VITE_*`) are inlined at build time, so a
 matter today:
 
 - `VITE_ADSENSE_CLIENT`, `VITE_ADSENSE_SLOT` — when both are set, the Browse
-  feed renders a Google AdSense `<ins>` slot every `VITE_AD_EVERY` (default 8)
+  feed renders a Google AdSense `<ins>` slot every `VITE_AD_EVERY` (default 15)
   job cards. With either var empty the AdCard component returns null, so the
   feed is jobs-only until AdSense is wired.
 
@@ -144,6 +144,16 @@ The scraper container mounts it read-only at `/app/state.json` and reads via
 # then:
 ./deploy/deploy-monitor.sh scrape   # rsyncs + runs one auth-enabled pass
 ```
+
+### Scraper health alerts (Telegram)
+
+`deploy/scrape-alert.sh` runs after every cron scrape pass. It pings the
+Telegram bot in `.env` (`TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID`) when the
+last `ALERT_LOOKBACK` (default 6) `done` events in `scrape.log` all show
+`"enqueued":0` — the typical signature of an expired Threads session.
+One-off zero-enqueued hours are normal for niche queries, hence the streak
+requirement. Alerts are throttled to once per `ALERT_COOLDOWN_HOURS`
+(default 12). Leave the env vars blank to disable.
 
 ### Cron schedule (`deploy/cuizhao-scrape.cron`)
 

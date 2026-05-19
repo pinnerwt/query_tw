@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { useConfigStore } from '../../state/configStore';
 import { encodePayload } from '../../lib/qrPayload';
@@ -6,26 +6,31 @@ import { encodePayload } from '../../lib/qrPayload';
 export function QrExport() {
   const config = useConfigStore((s) => s.config);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [size, setSize] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const payload = useMemo(() => encodePayload(config), [config]);
+  const size = payload.length;
+  const tooLarge = size > 2900;
+  const [renderError, setRenderError] = useState<string | null>(null);
 
   useEffect(() => {
-    const payload = encodePayload(config);
-    setSize(payload.length);
-    if (payload.length > 2900) {
-      setError('資料過大，無法產生 QR；請改用檔案匯出');
-      return;
-    }
-    setError(null);
+    if (tooLarge) return;
     const cv = canvasRef.current;
     if (!cv) return;
-    QRCode.toCanvas(cv, payload, { errorCorrectionLevel: 'H', margin: 1, width: 256 }).catch((e) =>
-      setError(String(e))
-    );
-  }, [config]);
+    let cancelled = false;
+    QRCode.toCanvas(cv, payload, { errorCorrectionLevel: 'H', margin: 1, width: 256 })
+      .then(() => {
+        if (!cancelled) setRenderError(null);
+      })
+      .catch((e) => {
+        if (!cancelled) setRenderError(String(e));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [payload, tooLarge]);
+
+  const error = tooLarge ? '資料過大，無法產生 QR；請改用檔案匯出' : renderError;
 
   const downloadFile = () => {
-    const payload = encodePayload(config);
     const blob = new Blob([payload], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
