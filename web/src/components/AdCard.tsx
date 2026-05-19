@@ -41,5 +41,5 @@ export function AdCard() {
 }
 
 const adEveryRaw = (import.meta as any).env?.VITE_AD_EVERY as string | undefined;
-export const AD_EVERY = Number(adEveryRaw ?? 8) || 8;
+export const AD_EVERY = Number(adEveryRaw ?? 15) || 15;
 export const AD_ENABLED = Boolean(CLIENT && SLOT);
